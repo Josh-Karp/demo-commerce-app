@@ -1,21 +1,45 @@
 version: "3"
 
 services:
+  app:
+    image: flask-docker
+    container_name: flask_app
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_NAME: demo_db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+    volumes:
+      - ./app:/app
+    links:
+      - db
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+
   db:
     image: mysql
+    container_name: mysql_db
     restart: always
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "3000:3000"
     volumes:
-      - db-data:/var/lib/mysql
+      - ./scripts/db_init.sql:/docker-entrypoint-initdb.d/db_init.sql
+      - mysql-data:/var/lib/mysql
+
   admin:
     image: phpmyadmin
+    container_name: phpmyadmin
     restart: always
     environment:
-      - PMA_ARBITRARY=1
+      MYSQL_ROOT_PASSWORD: admin
     ports:
       - 8080:80
 volumes:
-  db-data:
+  mysql-data:
+    driver: local
