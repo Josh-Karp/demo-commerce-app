@@ -12,4 +12,4 @@ RUN pip3 install -r flask/requirements.txt
 COPY . .
 
 ENTRYPOINT ["python"]
-CMD ["app/app.py"]
+CMD ["src/app.py"]

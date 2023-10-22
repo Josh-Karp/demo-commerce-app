@@ -1,5 +1,5 @@
 import { Squares2X2Icon } from "@heroicons/react/20/solid";
-import { useProducts, useProductsDispatch } from "../../context/ProductContext";
+import { useProductsContext, useProductsDispatch } from "../../context/ProductContext";
 import MenuDropdown from "../Shared/MenuDropdown";
 
 const SORT_BY = [
@@ -53,7 +53,7 @@ const COLORS = [
 ];
 
 function ProductActions() {
-  const { sortBy, filterBy, orientation } = useProducts();
+  const { sortBy, filterBy, orientation } = useProductsContext();
   const { setSortBy, setFilterBy, setOrientation } = useProductsDispatch();
 
   const handleSortBy = (item) => {

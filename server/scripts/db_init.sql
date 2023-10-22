@@ -34,47 +34,71 @@ VALUES(
 CREATE TABLE product(
     id INT AUTO_INCREMENT PRIMARY KEY,
     NAME VARCHAR(300),
+    category VARCHAR(300),
     description VARCHAR(300),
     brand VARCHAR(300),
     sku VARCHAR(300),
     price DECIMAL(10, 2),
+    color VARCHAR(300),
+    img_url VARCHAR(300),
+    img_alt VARCHAR(300),
+    popularity_score INT DEFAULT 50,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ); INSERT INTO product(
     NAME,
+    category,
     description,
     brand,
     sku,
-    price
+    price,
+    color,
+    img_url,
+    img_alt,
+    popularity_score
 )
 VALUES(
-    'Product 1',
-    'Description for Product 1',
-    'Brand A',
+    'Basic Black Tee',
+    'tee',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.',
+    'nike',
     'SKU001',
-    10.99
+    1050.50,
+    'black',
+    'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
+    'Front of men&#039;s Basic Black Tee by Nike.',
+    65
 ),(
-    'Product 2',
-    'Description for Product 2',
-    'Brand B',
+    'Basic White Tee',
+    'other',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.',
+    'nike',
     'SKU002',
-    20.99
+    120.00,
+    'white',
+    'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-02.jpg',
+    'Front of men&#039;s Basic White Tee by Nike.',
+    75
 ),(
-    'Product 3',
-    'Description for Product 3',
-    'Brand C',
+    'Basic Grey Tee',
+    'tee',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.',
+    'addidas',
     'SKU003',
-    30.99
+    430.99,
+    'grey',
+    'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-03.jpg',
+    'Front of men&#039;s Basic Grey Tee by Addidas.',
+    25
 ),(
-    'Product 4',
-    'Description for Product 4',
-    'Brand D',
+    'Hoodie',
+    'hoodie',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.',
+    'nike',
     'SKU004',
-    40.99
-),(
-    'Product 5',
-    'Description for Product 5',
-    'Brand E',
-    'SKU005',
-    50.99
+    500.00,
+    'black',
+    'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-04.jpg',
+    'Front of men&#039;s Hoodie by Nike.',
+    95
 );

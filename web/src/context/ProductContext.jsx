@@ -25,7 +25,8 @@ const ProductsProvider = ({ children }) => {
   );
 };
 
-const useProducts = () => useContext(ProductsContext);
+const useProductsContext = () => useContext(ProductsContext);
 const useProductsDispatch = () => useContext(ProductsDispatchContext);
 
-export { ProductsContext, ProductsProvider, useProducts, useProductsDispatch };
+export { ProductsContext, ProductsProvider, useProductsContext, useProductsDispatch };
+

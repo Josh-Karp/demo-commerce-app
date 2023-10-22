@@ -5,53 +5,54 @@ import AddProductModal from "../components/Product/Modals/AddProductModal";
 import DeleteProductModal from "../components/Product/Modals/DeleteProductModal";
 import ProductActions from "../components/Product/ProductActions";
 import ProductCard, { ORIENTATIONS } from "../components/Product/ProductCard";
-import { useProducts } from "../context/ProductContext";
+import { useProductsContext } from "../context/ProductContext";
+import useProductsQuery from "../hooks/useProducts";
 import sortArray from "../utils/sortArray";
 
-const products = [
-  {
-    id: 1,
-    name: "Basic Black Tee",
-    category: "tee",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.",
-    price: 100,
-    color: "black",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    popularity: 90,
-    createdAt: "2021-08-01T00:00:00.000Z",
-  },
-  {
-    id: 2,
-    name: "Basic White Tee",
-    category: "other",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.",
-    price: 200,
-    color: "white",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-02.jpg",
-    imageAlt: "Front of men's Basic Tee in white.",
-    popularity: 70,
-    createdAt: "2021-07-02T00:00:00.000Z",
-  },
-  {
-    id: 3,
-    name: "Basic Black Tee",
-    category: "tee",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.",
-    price: 300,
-    color: "black",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-03.jpg",
-    imageAlt: "Front of men's Basic Tee in white.",
-    popularity: 80,
-    createdAt: "2021-06-02T00:00:00.000Z",
-  },
-];
+// const products = [
+//   {
+//     id: 1,
+//     name: "Basic Black Tee",
+//     category: "tee",
+//     description:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.",
+//     price: 100,
+//     color: "black",
+//     imageSrc:
+//       "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
+//     imageAlt: "Front of men's Basic Tee in black.",
+//     popularity: 90,
+//     createdAt: "2021-08-01T00:00:00.000Z",
+//   },
+//   {
+//     id: 2,
+//     name: "Basic White Tee",
+//     category: "other",
+//     description:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.",
+//     price: 200,
+//     color: "white",
+//     imageSrc:
+//       "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-02.jpg",
+//     imageAlt: "Front of men's Basic Tee in white.",
+//     popularity: 70,
+//     createdAt: "2021-07-02T00:00:00.000Z",
+//   },
+//   {
+//     id: 3,
+//     name: "Basic Black Tee",
+//     category: "tee",
+//     description:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.",
+//     price: 300,
+//     color: "black",
+//     imageSrc:
+//       "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-03.jpg",
+//     imageAlt: "Front of men's Basic Tee in white.",
+//     popularity: 80,
+//     createdAt: "2021-06-02T00:00:00.000Z",
+//   },
+// ];
 
 const MODALS = [
   {
@@ -67,10 +68,18 @@ const MODALS = [
 ];
 
 function ProductPage() {
-  const [modals, setModals] = useState(null);
-  const [sortedProducts, setSortedProducts] = useState(products);
+  const [sortedProducts, setSortedProducts] = useState([]);
+  const { data: products, isLoading, isError } = useProductsQuery();
+  const { sortBy, filterBy, orientation } = useProductsContext();
+  const [modals, setModals] = useState(MODALS[0]);
 
-  const { sortBy, filterBy, orientation } = useProducts();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Something went wrong...</div>;
+  }
 
   const { key, order } = sortBy;
   const sorted_products = sortArray(products, key, order);

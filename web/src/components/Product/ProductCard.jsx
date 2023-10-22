@@ -92,7 +92,7 @@ function ProductCard({
         {/* TODO: Admin only wrapper */}
         <button
           onClick={() => alert("Delete Item")}
-          class='absolute z-90 top-4 left-4 w-6 h-6 rounded-full flex justify-center items-center'
+          className='absolute z-90 top-4 left-4 w-6 h-6 rounded-full flex justify-center items-center'
         >
           <TrashIcon className='transition text-gray-300 hover:text-indigo-600' />
         </button>

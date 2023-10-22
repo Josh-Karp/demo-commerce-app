@@ -1,4 +1,5 @@
 from flask import make_response, request, jsonify, Blueprint
+from flask_cors import cross_origin
 from api.factory import db
 from models.product import Product
 
@@ -6,9 +7,10 @@ product_bp = Blueprint("product", __name__, url_prefix="/product")
 
 
 @product_bp.route("/", methods=["GET"])
+@cross_origin()
 def read_all():
     products = Product.query.all()
-    return make_response(products, 200)
+    return jsonify(products), 200
 
 
 @product_bp.route("/<int:id>", methods=["GET"])
@@ -16,7 +18,7 @@ def read_by_id(id):
     product = Product.query.get(id)
 
     if product is not None:
-        return make_response(product, 200)
+        return jsonify(product, status=200)
     else:
         return make_response(f"Product with id {id} not found", 404)
 
