@@ -6,7 +6,7 @@ import DeleteProductModal from "../components/Product/Modals/DeleteProductModal"
 import ProductActions from "../components/Product/ProductActions";
 import ProductCard, { ORIENTATIONS } from "../components/Product/ProductCard";
 import { useProductsContext } from "../context/ProductContext";
-import useProductsQuery from "../hooks/useProducts";
+import useProductsQuery from "../hooks/useProductsQuery";
 import sortArray from "../utils/sortArray";
 
 // const products = [
