@@ -1,6 +1,6 @@
-import { PhotoIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
-import toast from "react-hot-toast";
-import useCreateProduct from "../../../hooks/useCreateProduct";
+import { PencilSquareIcon, PhotoIcon } from "@heroicons/react/24/solid";
+import { useProductsContext } from "../../../context/ProductContext";
+import { useProduct } from "../../../hooks/useProducts";
 import Modal from "../../Layout/Modal";
 
 const COLORS = Object.freeze({
@@ -23,46 +23,27 @@ const CATEGORIES = Object.freeze({
   other: "Other",
 });
 
-function AddProductModal({ setOpen, onClick, open = false }) {
-  const { createProduct } = useCreateProduct();
+function EditProductModal({ setOpen, onClick, open = false }) {
+  const { activeProduct } = useProductsContext();
+  const { data: product, isLoading, isError } = useProduct(activeProduct);
 
-  const handleCreateProduct = async (e) => {
-    e.preventDefault();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-    const { name, sku, price, brand, category, color, description } =
-      e.target.elements;
-
-    const product = {
-      name: name.value,
-      sku: sku.value,
-      price: price.value,
-      brand: brand.value,
-      category: category.value,
-      color: color.value,
-      description: description.value,
-    };
-
-    try {
-      await createProduct(product);
-
-      toast.success("Product created successfully");
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    } finally {
-      setOpen("add-product");
-    }
-  };
+  if (isError) {
+    return <div>Something went wrong...</div>;
+  }
 
   return (
     <Modal
-      label='Add Product'
+      label='Edit Product'
       open={open}
       setOpen={setOpen}
       icon={
         <div className='mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10'>
           {
-            <PlusCircleIcon
+            <PencilSquareIcon
               className='h-6 w-6 text-indigo-600'
               aria-hidden='true'
             />
@@ -71,27 +52,23 @@ function AddProductModal({ setOpen, onClick, open = false }) {
       }
       button={
         <button
-          type='submit'
-          form='add-product-form'
+          type='button'
           className='inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto'
+          onClick={() => onClick(false)}
         >
-          Add
+          Update
         </button>
       }
     >
-      <form
-        className='w-full'
-        id='add-product-form'
-        onSubmit={handleCreateProduct}
-      >
+      <form className='w-full'>
         <p className='text-sm leading-6 text-gray-600'>
-          Please enter the product information.
+          Please enter the updated product information.
         </p>
 
         <div className='mt-6 grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-6'>
           <div className='sm:col-span-3'>
             <label
-              htmlFor='name'
+              htmlFor='first-name'
               className='block text-sm font-medium leading-6 text-gray-900'
             >
               Name
@@ -99,8 +76,9 @@ function AddProductModal({ setOpen, onClick, open = false }) {
             <div className='mt-2'>
               <input
                 type='text'
-                name='name'
-                id='name'
+                name='first-name'
+                id='first-name'
+                autoComplete='given-name'
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
@@ -260,4 +238,4 @@ function AddProductModal({ setOpen, onClick, open = false }) {
   );
 }
 
-export default AddProductModal;
+export default EditProductModal;

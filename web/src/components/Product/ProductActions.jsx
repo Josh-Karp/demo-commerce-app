@@ -4,20 +4,20 @@ import MenuDropdown from "../Shared/MenuDropdown";
 
 const SORT_BY = [
   {
-    id: 1,
+    id: "popularity",
     name: "popularity",
     order: "asc",
     label: "Most Popular",
   },
-  { id: 2, name: "createdAt", order: "asc", label: "Newest" },
+  { id: "created-at", name: "createdAt", order: "asc", label: "Newest" },
   {
-    id: 3,
+    id: "price-asc",
     name: "price",
     order: "asc",
     label: "Price: Low to High",
   },
   {
-    id: 4,
+    id: "price-desc",
     name: "price",
     order: "desc",
     label: "Price: High to Low",
@@ -92,7 +92,7 @@ function ProductActions() {
           items={SORT_BY}
           position='right'
           onClick={handleSortBy}
-          activeItem={sortBy.key}
+          activeItem={sortBy.id}
         />
         <div className='flex items-center'>
           <MenuDropdown

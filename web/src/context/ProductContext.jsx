@@ -4,6 +4,8 @@ const ProductsContext = createContext();
 const ProductsDispatchContext = createContext();
 
 const ProductsProvider = ({ children }) => {
+  const [activeProduct, setActiveProduct] = useState(null);
+  const [activeModal, setActiveModal] = useState(null);
   const [orientation, setOrientation] = useState("vertical");
   const [sortBy, setSortBy] = useState({
     key: "popularity",
@@ -14,10 +16,22 @@ const ProductsProvider = ({ children }) => {
     color: null,
   });
 
+  const handleToggleModal = (id) => {
+    setActiveModal((prev) => (prev === id ? null : id));
+  };
+
   return (
-    <ProductsContext.Provider value={{ sortBy, filterBy, orientation }}>
+    <ProductsContext.Provider
+      value={{ sortBy, filterBy, orientation, activeProduct, activeModal }}
+    >
       <ProductsDispatchContext.Provider
-        value={{ setSortBy, setFilterBy, setOrientation }}
+        value={{
+          setSortBy,
+          setFilterBy,
+          setOrientation,
+          setActiveProduct,
+          handleToggleModal,
+        }}
       >
         {children}
       </ProductsDispatchContext.Provider>
@@ -28,5 +42,10 @@ const ProductsProvider = ({ children }) => {
 const useProductsContext = () => useContext(ProductsContext);
 const useProductsDispatch = () => useContext(ProductsDispatchContext);
 
-export { ProductsContext, ProductsProvider, useProductsContext, useProductsDispatch };
+export {
+  ProductsContext,
+  ProductsProvider,
+  useProductsContext,
+  useProductsDispatch
+};
 

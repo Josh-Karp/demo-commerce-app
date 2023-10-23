@@ -2,6 +2,8 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 import clsx from "clsx";
 import React from "react";
 import { NumericFormat } from "react-number-format";
+import { useProductsDispatch } from "../../context/ProductContext";
+import AdminGuard from "../AdminGuard";
 
 export const ORIENTATIONS = Object.freeze({
   hoizontal: "horizontal",
@@ -18,6 +20,18 @@ function ProductCard({
   description,
   orientation = ORIENTATIONS.vertical,
 }) {
+  const { handleToggleModal, setActiveProduct } = useProductsDispatch();
+
+  const handleDeleteProduct = () => {
+    setActiveProduct(id);
+    handleToggleModal("delete-product");
+  };
+
+  const handleEditProduct = () => {
+    setActiveProduct(id);
+    handleToggleModal("edit-product");
+  };
+
   return (
     <div
       key={id}
@@ -66,7 +80,12 @@ function ProductCard({
             </p>
           </div>
           <p className='text-lg font-medium text-gray-900'>
-            <NumericFormat value={price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+            <NumericFormat
+              value={price.toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
           </p>
         </div>
         <p className='text-sm text-gray-500 px-4'>{description}</p>
@@ -89,19 +108,20 @@ function ProductCard({
             Add to Cart
           </button>
         </div>
-        {/* TODO: Admin only wrapper */}
-        <button
-          onClick={() => alert("Delete Item")}
-          className='absolute z-90 top-4 left-4 w-6 h-6 rounded-full flex justify-center items-center'
-        >
-          <TrashIcon className='transition text-gray-300 hover:text-indigo-600' />
-        </button>
-        <button
-          onClick={() => alert("Edit Item")}
-          className='absolute z-90 top-4 right-4 w-6 h-6 rounded-full flex justify-center items-center'
-        >
-          <PencilSquareIcon className='transition text-gray-300 hover:text-indigo-600' />
-        </button>
+        <AdminGuard>
+          <button
+            onClick={() => handleDeleteProduct()}
+            className='absolute z-90 top-4 left-4 w-6 h-6 rounded-full flex justify-center items-center'
+          >
+            <TrashIcon className='transition text-gray-300 hover:text-indigo-600' />
+          </button>
+          <button
+            onClick={() => handleEditProduct()}
+            className='absolute z-90 top-4 right-4 w-6 h-6 rounded-full flex justify-center items-center'
+          >
+            <PencilSquareIcon className='transition text-gray-300 hover:text-indigo-600' />
+          </button>
+        </AdminGuard>
       </div>
     </div>
   );

@@ -5,7 +5,6 @@ from models.product import Product
 
 product_bp = Blueprint("product", __name__, url_prefix="/product")
 
-
 @product_bp.route("/", methods=["GET"])
 @cross_origin()
 def read_all():
@@ -14,22 +13,24 @@ def read_all():
 
 
 @product_bp.route("/<int:id>", methods=["GET"])
+@cross_origin()
 def read_by_id(id):
     product = Product.query.get(id)
 
     if product is not None:
-        return jsonify(product, status=200)
+        return jsonify(product), 200
     else:
-        return make_response(f"Product with id {id} not found", 404)
+        return jsonify({"message": f"Product with id {id} not found"}), 404
 
 
 @product_bp.route("/", methods=["POST"])
+@cross_origin()
 def create():
     product_data = request.get_json()
     required_fields = ["sku", "name", "brand", "description", "price"]
 
     if not all(field in product_data and product_data[field] for field in required_fields):
-        return make_response(f"Invalid request body", 400)
+        return jsonify({"message": f"Invalid request body"}), 400
 
     sku = product_data["sku"]
 
@@ -42,10 +43,11 @@ def create():
         db.session.commit()
         return jsonify(new_product), 201
     else:
-        return make_response(f"Product with sku {sku} already exists", 406)
+        return jsonify({"message": f"Product with sku {sku} already exists"}), 406
 
 
 @product_bp.route("/<int:id>", methods=["PUT"])
+@cross_origin()
 def update(id):
     product_data = request.get_json()
     is_updated = Product.query.filter(Product.id == id).update(product_data)
@@ -53,18 +55,19 @@ def update(id):
     if is_updated:
         db.session.commit()
 
-        return make_response(f"Product with id {id} successfully updated", 200)
+        return jsonify(True), 200
     else:
-        return make_response(f"Product with id {id} not found", 404)
+        return jsonify({"message": f"Product with id {id} not found"}), 404
 
 
 @product_bp.route("/<int:id>", methods=["DELETE"])
+@cross_origin()
 def delete(id):
     existing_product = Product.query.get(id)
 
     if existing_product:
         db.session.delete(existing_product)
         db.session.commit()
-        return make_response(f"Product with id {id} successfully deleted", 200)
+        return jsonify(True), 200
     else:
-        return make_response(f"Product with id {id} not found", 404)
+        return jsonify({"message": f"Product with id {id} not found"}), 404

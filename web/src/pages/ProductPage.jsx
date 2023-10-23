@@ -3,75 +3,38 @@ import React, { useState } from "react";
 import AddProductCard from "../components/Product/AddProductCard";
 import AddProductModal from "../components/Product/Modals/AddProductModal";
 import DeleteProductModal from "../components/Product/Modals/DeleteProductModal";
+import EditProductModal from "../components/Product/Modals/EditProductModal";
 import ProductActions from "../components/Product/ProductActions";
 import ProductCard, { ORIENTATIONS } from "../components/Product/ProductCard";
-import { useProductsContext } from "../context/ProductContext";
-import useProductsQuery from "../hooks/useProductsQuery";
-import sortArray from "../utils/sortArray";
-
-// const products = [
-//   {
-//     id: 1,
-//     name: "Basic Black Tee",
-//     category: "tee",
-//     description:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.",
-//     price: 100,
-//     color: "black",
-//     imageSrc:
-//       "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-//     imageAlt: "Front of men's Basic Tee in black.",
-//     popularity: 90,
-//     createdAt: "2021-08-01T00:00:00.000Z",
-//   },
-//   {
-//     id: 2,
-//     name: "Basic White Tee",
-//     category: "other",
-//     description:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.",
-//     price: 200,
-//     color: "white",
-//     imageSrc:
-//       "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-02.jpg",
-//     imageAlt: "Front of men's Basic Tee in white.",
-//     popularity: 70,
-//     createdAt: "2021-07-02T00:00:00.000Z",
-//   },
-//   {
-//     id: 3,
-//     name: "Basic Black Tee",
-//     category: "tee",
-//     description:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in sem cras amet.",
-//     price: 300,
-//     color: "black",
-//     imageSrc:
-//       "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-03.jpg",
-//     imageAlt: "Front of men's Basic Tee in white.",
-//     popularity: 80,
-//     createdAt: "2021-06-02T00:00:00.000Z",
-//   },
-// ];
+import {
+  useProductsContext,
+  useProductsDispatch,
+} from "../context/ProductContext";
+import { useProducts } from "../hooks/useProducts";
+import useProductsFilter from "../hooks/useProductsFilter";
 
 const MODALS = [
   {
     id: "delete-product",
-    open: true,
-    component: DeleteProductModal,
+    Component: DeleteProductModal,
+  },
+  {
+    id: "edit-product",
+    Component: EditProductModal,
   },
   {
     id: "add-product",
-    open: false,
-    component: AddProductModal,
-  },
+    Component: AddProductModal,
+  }
 ];
 
 function ProductPage() {
   const [sortedProducts, setSortedProducts] = useState([]);
-  const { data: products, isLoading, isError } = useProductsQuery();
-  const { sortBy, filterBy, orientation } = useProductsContext();
-  const [modals, setModals] = useState(MODALS[0]);
+
+  const { data: products, isLoading, isError } = useProducts();
+  const { sortBy, filterBy, orientation, activeModal } = useProductsContext();
+  const { handleToggleModal } = useProductsDispatch();
+  const filteredProducts = useProductsFilter(products, sortBy, filterBy);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -80,21 +43,6 @@ function ProductPage() {
   if (isError) {
     return <div>Something went wrong...</div>;
   }
-
-  const { key, order } = sortBy;
-  const sorted_products = sortArray(products, key, order);
-
-  const { category, color } = filterBy;
-  const filtered_products = sorted_products.filter((product) => {
-    if (category && color) {
-      return product.category === category && product.color === color;
-    } else if (category) {
-      return product.category === category;
-    } else if (color) {
-      return product.color === color;
-    }
-    return true;
-  });
 
   return (
     <>
@@ -110,7 +58,7 @@ function ProductPage() {
               "border p-8 rounded-lg mt-2 grid grid-cols-1 gap-x-6 gap-y-10 xl:gap-x-8"
             )}
           >
-            {filtered_products.map((product) => (
+            {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 orientation={orientation}
@@ -121,18 +69,11 @@ function ProductPage() {
           </div>
         </div>
       </div>
-      {MODALS.map(({ id, open, component }) => (
-        <component
+      {MODALS.map(({ id, Component }) => (
+        <Component
           key={id}
-          open={open}
-          onClick={() =>
-            setModels({
-              ...modals,
-              [id]: {
-                open: open,
-              },
-            })
-          }
+          open={activeModal === id}
+          setOpen={() => handleToggleModal(id)}
         />
       ))}
     </>

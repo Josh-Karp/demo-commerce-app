@@ -3,10 +3,6 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import React, { Fragment } from "react";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 function MenuDropdown({
   label,
   items,
@@ -48,7 +44,7 @@ function MenuDropdown({
                 {({ active }) => (
                   <div
                     className={clsx("flex items-center hover:bg-gray-100", {
-                      "bg-gray-100": active || activeItem === item.name,
+                      "bg-gray-100": active || activeItem === item.id,
                     })}
                     onClick={() => onClick(item)}
                   >

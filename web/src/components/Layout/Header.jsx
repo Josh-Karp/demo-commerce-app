@@ -1,7 +1,11 @@
 import { Dialog } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  ShoppingCartIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 const NAVIGATION_ITEMS = [
   { id: 1, name: "Products", href: "#" },
@@ -22,12 +26,7 @@ function Header() {
         >
           <div className='flex lg:flex-1'>
             <a href='#' className='-m-1.5 p-1.5'>
-              <span className='sr-only'>Demo Company</span>
-              <img
-                className='h-8 w-auto'
-                src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
-                alt=''
-              />
+              <img className='h-8 w-auto' src='/logo.png' alt='Logo' />
             </a>
           </div>
           <div className='flex lg:hidden'>
@@ -52,12 +51,7 @@ function Header() {
             ))}
           </div>
           <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-            <Link
-              className='text-sm font-semibold leading-6 text-gray-900'
-              to='/login'
-            >
-              Log in <span aria-hidden='true'>&rarr;</span>
-            </Link>
+            <ShoppingCartIcon className='transition w-6 text-indigo-600 hover:text-indigo-500 hover:cursor-pointer' />
           </div>
         </nav>
         <Dialog
@@ -71,11 +65,7 @@ function Header() {
             <div className='flex items-center justify-between'>
               <a href='#' className='-m-1.5 p-1.5'>
                 <span className='sr-only'>Demo Company</span>
-                <img
-                  className='h-8 w-auto'
-                  src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
-                  alt=''
-                />
+                <img className='h-8 w-auto' src='/logo.png' alt='' />
               </a>
               <button
                 type='button'
@@ -100,12 +90,7 @@ function Header() {
                   ))}
                 </div>
                 <div className='py-6'>
-                  <Link
-                    className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
-                    to='/login'
-                  >
-                    Log in
-                  </Link>
+                  <ShoppingCartIcon className='transition w-6 text-indigo-600 hover:text-indigo-500 hover:cursor-pointer' />
                 </div>
               </div>
             </div>

@@ -1,13 +1,13 @@
 from flask import make_response, abort, request, jsonify, Blueprint
 from api.factory import db
-from models.users import Users
+from models.user import User
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
 
 
 @users_bp.route("/<string:email>", methods=["GET"])
 def read_by_email(email):
-    user = Users.query.filter(Users.email == email).one_or_none()
+    user = User.query.filter(User.email == email).one_or_none()
 
     if user is not None:
         return jsonify(user), 200
@@ -17,7 +17,7 @@ def read_by_email(email):
 
 @users_bp.route("/<string:id>", methods=["GET"])
 def read_by_id(id):
-    user = Users.query.get(id)
+    user = User.query.get(id)
 
     if user is not None:
         return jsonify(user), 200
@@ -34,17 +34,11 @@ def create():
     if not email or not password:
         return make_response("Email and password are required", 400)
 
-    existing_user = Users.query.filter(Users.email == email).one_or_none()
+    existing_user = User.query.filter(User.email == email).one_or_none()
 
     if existing_user is None:
-        new_user = Users(
-            email=user_data.get("email"),
-            username=user_data.get("username"),
-            password=user_data.get("password"),
-            first_name=user_data.get("first_name"),
-            last_name=user_data.get("last_name"),
-        )
-
+        new_user = User(**user_data)
+        
         db.session.add(new_user)
         db.session.commit()
         return jsonify(new_user), 201
@@ -55,10 +49,10 @@ def create():
 @users_bp.route("/<int:id>", methods=["PUT"])
 def update(id):
     user_data = request.get_json()
-    existing_user = Users.query.get(id)
+    existing_user = User.query.get(id)
 
     if existing_user:
-        update_user = Users(
+        update_user = User(
             email=user_data.get("email"),
             username=user_data.get("username"),
             password=user_data.get("password"),
@@ -75,7 +69,7 @@ def update(id):
 
 @users_bp.route("/<int:id>", methods=["DELETE"])
 def delete(id):
-    existing_user = Users.query.get(id)
+    existing_user = User.query.get(id)
 
     if existing_user:
         db.session.delete(existing_user)
