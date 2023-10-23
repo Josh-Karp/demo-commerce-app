@@ -13,8 +13,8 @@ class Role(db.Model):
 class UserRole(db.Model):
     __tablename__ = "users_roles"
 
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    role_id = db.Column(db.Integer, db.ForeignKey("roles.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id") viewonly=True )
+    role_id = db.Column(db.Integer, db.ForeignKey("roles.id") viewonly=True )
 
     user = db.relationship("User", foreign_keys=[user_id], backref="users_roles")
     role = db.relationship("Role", foreign_keys=[role_id], backref="users_roles")
