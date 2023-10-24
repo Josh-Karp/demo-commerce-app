@@ -47,7 +47,7 @@ VALUES(
 ),(
     'user_good',
     'email_good@good.com',
-    'password_good',
+    'scrypt:0261dfe81bbdfe7be7fde2b44b7d745bf65434056f58e82e0542f320c23e55d0f6297aa5510582c4fee4ebcd34d6cd4790c8ad6315918183fca6809853acccf6',
     'Demo',
     'User',
     1

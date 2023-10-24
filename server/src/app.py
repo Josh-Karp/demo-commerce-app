@@ -1,18 +1,11 @@
-from api.factory import app
+from api.factory import create_app
 from flask import jsonify, make_response
-from controllers.users import users_bp
-from controllers.product import product_bp
-from controllers.authentication import auth_bp
 
+app = create_app()
 
 @app.errorhandler(Exception)
 def exception(e):
     return make_response(f"Internal Server Error: {e}", 500)
-
-
-app.register_blueprint(users_bp)
-app.register_blueprint(product_bp)
-app.register_blueprint(auth_bp)
 
 
 @app.route("/healthcheck", methods=["GET"])

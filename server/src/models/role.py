@@ -1,31 +1,17 @@
-from datetime import datetime
-from sqlalchemy import Column
 from api.factory import db
 
 
 class Role(db.Model):
+    """
+    A class representing a user role in the system.
+
+    Attributes:
+        id (int): The unique identifier for the role.
+        name (str): The name of the role.
+        description (str): A description of the role.
+    """
     __tablename__ = "roles"
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     description = db.Column(db.String(100), nullable=True)
-
-
-class UserRole(db.Model):
-    __tablename__ = "users_roles"
-
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id") viewonly=True )
-    role_id = db.Column(db.Integer, db.ForeignKey("roles.id") viewonly=True )
-
-    user = db.relationship("User", foreign_keys=[user_id], backref="users_roles")
-    role = db.relationship("Role", foreign_keys=[role_id], backref="users_roles")
-
-    created_at = Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    __mapper_args__ = {"primary_key": [user_id, role_id]}
-
-
-users_roles = db.Table(
-    "users_roles",
-    db.Column("user_id", db.Integer, db.ForeignKey("users.id")),
-    db.Column("role_id", db.Integer, db.ForeignKey("roles.id")),
-    keep_existing=True,
-)

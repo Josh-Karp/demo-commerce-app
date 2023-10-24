@@ -1,5 +1,8 @@
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Determine the folder of the top-level directory of this project
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -9,14 +12,14 @@ class Config(object):
     DEBUG = False
     TESTING = False
     SECRET_KEY = os.getenv("SECRET_KEY", default="DEFAULT_SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
+    SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
         default="mysql+pymysql://{}:{}@{}:{}/{}".format(
-            os.environ.get("DB_USER", "flask"),
-            os.environ.get("DB_PASSWORD", "admin"),
-            os.environ.get("DB_HOST", "mysql"),
-            os.environ.get("DB_PORT", "3306"),
-            os.environ.get("DB_NAME", "demo_db"),
+            os.getenv("DB_USER"),
+            os.getenv("DB_PASSWORD"),
+            os.getenv("DB_HOST"),
+            os.getenv("DB_PORT"),
+            os.getenv("DB_NAME"),
         ),
     )
 
@@ -34,10 +37,10 @@ class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "TEST_DATABASE_URI",
         default="mysql+pymysql://{}:{}@{}:{}/{}".format(
-            os.environ.get("DB_USER", "flask"),
-            os.environ.get("DB_PASSWORD", "admin"),
-            os.environ.get("DB_HOST", "mysql"),
-            os.environ.get("DB_PORT", "3306"),
-            os.environ.get("DB_NAME", "test_db"),
+            os.getenv("DB_USER"),
+            os.getenv("DB_PASSWORD"),
+            os.getenv("DB_HOST"),
+            os.getenv("DB_PORT"),
+            os.getenv("DB_NAME"),
         ),
     )
