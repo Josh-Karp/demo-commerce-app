@@ -25,7 +25,7 @@ const MODALS = [
   {
     id: "add-product",
     Component: AddProductModal,
-  }
+  },
 ];
 
 function ProductPage() {

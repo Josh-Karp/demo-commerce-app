@@ -5,7 +5,8 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { removeAuthToken } from "../../utils/localAuth";
 
 const NAVIGATION_ITEMS = [
   { id: 1, name: "Products", href: "#" },
@@ -16,6 +17,7 @@ const NAVIGATION_ITEMS = [
 
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -50,8 +52,17 @@ function Header() {
               </a>
             ))}
           </div>
-          <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-            <ShoppingCartIcon className='transition w-6 text-indigo-600 hover:text-indigo-500 hover:cursor-pointer' />
+          <div className='hidden lg:flex lg:flex-1 lg:justify-end space-x-4 pe-4'>
+            <ShoppingCartIcon className='transition w-6 text-sm font-semibold text-gray-900 hover:text-indigo-500 hover:cursor-pointer' />
+            <button
+              className='transition w-6 text-sm font-semibold hover:text-indigo-500 hover:cursor-pointer'
+              onClick={() => {
+                removeAuthToken();
+                navigate("/auth/login");
+              }}
+            >
+              Logout
+            </button>
           </div>
         </nav>
         <Dialog
@@ -91,6 +102,12 @@ function Header() {
                 </div>
                 <div className='py-6'>
                   <ShoppingCartIcon className='transition w-6 text-indigo-600 hover:text-indigo-500 hover:cursor-pointer' />
+                  <button
+                    className='transition w-6 text-indigo-600 hover:text-indigo-500 hover:cursor-pointer'
+                    onClick={() => removeAuthToken()}
+                  >
+                    Logout
+                  </button>
                 </div>
               </div>
             </div>

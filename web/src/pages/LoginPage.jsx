@@ -1,11 +1,9 @@
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import useLogin from "../hooks/useLogin";
-import { getAuthUser } from "../utils/localAuth";
 
 function LoginPage() {
   const { login } = useLogin();
-  const user = getAuthUser();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -82,9 +80,9 @@ function LoginPage() {
                 Sign in
               </button>
             </div>
-            <div className='flex justify-end text-sm' onClick={null}>
+            <div className='flex justify-end text-sm'>
               <Link
-                to='/register'
+                to='/auth/register'
                 className='ms-auto font-semibold text-indigo-600 hover:text-indigo-500'
               >
                 Create a new account?

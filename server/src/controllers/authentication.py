@@ -1,4 +1,3 @@
-import os
 import jwt
 
 from datetime import datetime, timedelta
@@ -7,6 +6,7 @@ from flask_cors import cross_origin
 
 from api.factory import db
 from models.user import User
+from models.role import Role
 
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -25,6 +25,7 @@ def login():
         return make_response(jsonify({"message": f"Invalid request body"}), 400)
 
     user = User.query.filter(User.email == email).one_or_none()
+    role = Role.query.filter(Role.id == user.role_id).one_or_none()
 
     if user is None:
         return make_response(jsonify({"message": f"User with email {email} not found"}), 404)
@@ -33,8 +34,14 @@ def login():
 
     if verify_password:
         token = jwt.encode(
-            {"id": user.id, "exp": datetime.utcnow() + timedelta(minutes=30)},
-             current_app.config["SECRET_KEY"],
+            {
+                "id": user.id,
+                "exp": datetime.utcnow() + timedelta(minutes=30),
+                "username": user.username,
+                "email": user.email,
+                "role": role.name,
+            },
+            current_app.config["SECRET_KEY"],
         )
 
         return make_response(jsonify({"token": token.decode("UTF-8")}), 201)

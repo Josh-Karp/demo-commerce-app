@@ -3,7 +3,7 @@ import { getAuthUserRole } from "../utils/localAuth";
 function AdminGuard({ children }) {
   const userRole = getAuthUserRole();
 
-  if (!userRole && userRole == "admin") {
+  if (userRole && userRole == "admin") {
     return <>{children}</>;
   }
 

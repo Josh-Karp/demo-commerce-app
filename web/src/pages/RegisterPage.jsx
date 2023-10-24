@@ -1,10 +1,10 @@
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useRegister from "../hooks/useRegister";
 
 function RegisterPage() {
   const { register } = useRegister();
-  const { navigate } = useNavigate()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -177,7 +177,7 @@ function RegisterPage() {
             </div>
             <div className='flex justify-end text-sm' onClick={null}>
               <Link
-                to='/login'
+                to='/auth/login'
                 className='ms-auto font-semibold text-indigo-600 hover:text-indigo-500'
               >
                 Already registered?
