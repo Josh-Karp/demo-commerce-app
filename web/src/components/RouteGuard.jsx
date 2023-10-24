@@ -1,6 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { getAuthUser } from "../utils/localAuth";
 
-function RouteGuard({ user, redirectPath = "/auth/login" }) {
+function RouteGuard({ redirectPath = "/auth/login" }) {
+  const user = getAuthUser();
+
   if (!user) {
     return <Navigate to={redirectPath} replace />;
   }

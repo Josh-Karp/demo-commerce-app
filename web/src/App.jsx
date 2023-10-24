@@ -12,17 +12,14 @@ import { ProductsProvider } from "./context/ProductContext";
 import LoginPage from "./pages/LoginPage";
 import ProductPage from "./pages/ProductPage";
 import RegisterPage from "./pages/RegisterPage";
-import { getAuthUser } from "./utils/localAuth";
 
 const queryClient = new QueryClient();
-
-const user = getAuthUser();
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path='/' element={<Header />}>
-        <Route element={<RouteGuard user={user} />}>
+        <Route element={<RouteGuard />}>
           <Route index element={<ProductPage />} />
         </Route>
       </Route>
