@@ -31,7 +31,7 @@ function EditProductModal({ setOpen, onClick, open = false }) {
   const { activeProduct } = useProductsContext();
   const { data, isLoading, isError } = useProduct(activeProduct);
   const [product, setProduct] = useState({});
-  
+
   useEffect(() => {
     if (data) {
       setProduct(data);
@@ -44,7 +44,7 @@ function EditProductModal({ setOpen, onClick, open = false }) {
     const product_data = {
       id: data.id,
       ...product,
-    }
+    };
 
     try {
       await updateProduct(product_data);
@@ -67,11 +67,12 @@ function EditProductModal({ setOpen, onClick, open = false }) {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return null;
   }
 
   if (isError) {
-    return <div>Something went wrong...</div>;
+    toast.error("Something went wrong");
+    return null;
   }
 
   return (

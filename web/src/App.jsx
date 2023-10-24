@@ -6,7 +6,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import Header from "./components/Layout/Header";
+import Layout from "./components/Layout/Layout";
 import RouteGuard from "./components/RouteGuard";
 import { ProductsProvider } from "./context/ProductContext";
 import LoginPage from "./pages/LoginPage";
@@ -18,7 +18,7 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path='/' element={<Header />}>
+      <Route path='/' element={<Layout />}>
         <Route element={<RouteGuard />}>
           <Route index element={<ProductPage />} />
         </Route>

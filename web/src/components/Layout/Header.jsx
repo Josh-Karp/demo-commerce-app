@@ -5,7 +5,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { removeAuthToken } from "../../utils/localAuth";
 
 const NAVIGATION_ITEMS = [
@@ -52,7 +52,7 @@ function Header() {
               </a>
             ))}
           </div>
-          <div className='hidden lg:flex lg:flex-1 lg:justify-end space-x-4 pe-4'>
+          <div className='hidden lg:flex lg:flex-1 lg:justify-end space-x-4 px-4'>
             <ShoppingCartIcon className='transition w-6 text-sm font-semibold text-gray-900 hover:text-indigo-500 hover:cursor-pointer' />
             <button
               className='transition w-6 text-sm font-semibold hover:text-indigo-500 hover:cursor-pointer'
@@ -101,10 +101,13 @@ function Header() {
                   ))}
                 </div>
                 <div className='py-6'>
-                  <ShoppingCartIcon className='transition w-6 text-indigo-600 hover:text-indigo-500 hover:cursor-pointer' />
+                  <ShoppingCartIcon className='transition w-6 text-sm font-semibold text-gray-900 hover:text-indigo-500 hover:cursor-pointer' />
                   <button
-                    className='transition w-6 text-indigo-600 hover:text-indigo-500 hover:cursor-pointer'
-                    onClick={() => removeAuthToken()}
+                    className='transition w-6 pt-4 text-sm font-semibold hover:text-indigo-500 hover:cursor-pointer'
+                    onClick={() => {
+                      removeAuthToken();
+                      navigate("/auth/login");
+                    }}
                   >
                     Logout
                   </button>
@@ -114,7 +117,6 @@ function Header() {
           </Dialog.Panel>
         </Dialog>
       </header>
-      <Outlet />
     </>
   );
 }

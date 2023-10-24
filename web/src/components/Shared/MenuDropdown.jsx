@@ -41,11 +41,12 @@ function MenuDropdown({
           <div className='py-1'>
             {items.map((item) => (
               <Menu.Item key={item.id}>
-                {({ active }) => (
+                {() => (
                   <div
-                    className={clsx("flex items-center hover:bg-gray-100", {
-                      "bg-gray-100": active || activeItem === item.id,
-                    })}
+                    className={clsx(
+                      [activeItem === item.name && "bg-gray-100"],
+                      "flex items-center hover:bg-gray-100"
+                    )}
                     onClick={() => onClick(item)}
                   >
                     {checkbox && (
