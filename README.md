@@ -1,5 +1,12 @@
 # Demo
 
+## Live Demo
+
+1. Web - `https://vercel.com/josh-karp/demo-commerce-app` *(Vercel)*
+2. Server - `http://167.172.150.140:5000` *(DigitalOcean Droplet)*
+
+> Note: The server does not have an SSL certificate, **Insecure content** must be set to allowed on the browser under site settings.
+
 ## Server
 
 ### Tech Stack
