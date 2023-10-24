@@ -10,16 +10,20 @@ export const ORIENTATIONS = Object.freeze({
   vertical: "vertical",
 });
 
-function ProductCard({
-  id,
-  name,
-  color,
-  price,
-  imageSrc,
-  imageAlt,
-  description,
-  orientation = ORIENTATIONS.vertical,
-}) {
+function ProductCard({ product, orientation = ORIENTATIONS.vertical }) {
+  const {
+    id,
+    name,
+    sku,
+    price,
+    brand,
+    category,
+    color,
+    description,
+    "img_url": imageSrc,
+    "img-alt": imageAlt,
+  } = product;
+
   const { handleToggleModal, setActiveProduct } = useProductsDispatch();
 
   const handleDeleteProduct = () => {

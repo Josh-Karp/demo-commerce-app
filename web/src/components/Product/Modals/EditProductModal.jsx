@@ -1,6 +1,9 @@
-import { PencilSquareIcon, PhotoIcon } from "@heroicons/react/24/solid";
+import { PencilSquareIcon } from "@heroicons/react/24/solid";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useProductsContext } from "../../../context/ProductContext";
 import { useProduct } from "../../../hooks/useProducts";
+import useUpdateProduct from "../../../hooks/useUpdateProduct";
 import Modal from "../../Layout/Modal";
 
 const COLORS = Object.freeze({
@@ -24,8 +27,44 @@ const CATEGORIES = Object.freeze({
 });
 
 function EditProductModal({ setOpen, onClick, open = false }) {
+  const { updateProduct } = useUpdateProduct();
   const { activeProduct } = useProductsContext();
-  const { data: product, isLoading, isError } = useProduct(activeProduct);
+  const { data, isLoading, isError } = useProduct(activeProduct);
+  const [product, setProduct] = useState({});
+  
+  useEffect(() => {
+    if (data) {
+      setProduct(data);
+    }
+  }, [data]);
+
+  const handleUpdateProduct = async (e) => {
+    e.preventDefault();
+
+    const product_data = {
+      id: data.id,
+      ...product,
+    }
+
+    try {
+      await updateProduct(product_data);
+
+      toast.success("Product updated successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    } finally {
+      setOpen("edit-product");
+    }
+  };
+
+  const handleUpdateValues = (e) => {
+    const { name, value } = e.target;
+
+    setProduct(() => ({
+      [name]: value,
+    }));
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -52,15 +91,19 @@ function EditProductModal({ setOpen, onClick, open = false }) {
       }
       button={
         <button
-          type='button'
+          type='submit'
           className='inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto'
-          onClick={() => onClick(false)}
+          form='edit-product-form'
         >
           Update
         </button>
       }
     >
-      <form className='w-full'>
+      <form
+        className='w-full'
+        id='edit-product-form'
+        onSubmit={handleUpdateProduct}
+      >
         <p className='text-sm leading-6 text-gray-600'>
           Please enter the updated product information.
         </p>
@@ -68,7 +111,7 @@ function EditProductModal({ setOpen, onClick, open = false }) {
         <div className='mt-6 grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-6'>
           <div className='sm:col-span-3'>
             <label
-              htmlFor='first-name'
+              htmlFor='name'
               className='block text-sm font-medium leading-6 text-gray-900'
             >
               Name
@@ -76,9 +119,10 @@ function EditProductModal({ setOpen, onClick, open = false }) {
             <div className='mt-2'>
               <input
                 type='text'
-                name='first-name'
-                id='first-name'
-                autoComplete='given-name'
+                name='name'
+                id='name'
+                value={product.name}
+                onChange={(e) => handleUpdateValues(e)}
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
@@ -96,6 +140,8 @@ function EditProductModal({ setOpen, onClick, open = false }) {
                 type='text'
                 name='sku'
                 id='sku'
+                value={product.sku}
+                onChange={(e) => handleUpdateValues(e)}
                 autoComplete='given-name'
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
@@ -114,6 +160,8 @@ function EditProductModal({ setOpen, onClick, open = false }) {
                 type='text'
                 name='price'
                 id='price'
+                value={product.price}
+                onChange={(e) => handleUpdateValues(e)}
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
@@ -131,6 +179,8 @@ function EditProductModal({ setOpen, onClick, open = false }) {
                 type='text'
                 name='brand'
                 id='brand'
+                value={product.brand}
+                onChange={(e) => handleUpdateValues(e)}
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
@@ -147,6 +197,8 @@ function EditProductModal({ setOpen, onClick, open = false }) {
               <select
                 id='category'
                 name='category'
+                value={product.category}
+                onChange={(e) => handleUpdateValues(e)}
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
               >
                 {Object.keys(CATEGORIES).map((color) => (
@@ -169,6 +221,8 @@ function EditProductModal({ setOpen, onClick, open = false }) {
               <select
                 id='color'
                 name='color'
+                value={product.color}
+                onChange={(e) => handleUpdateValues(e)}
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
               >
                 {Object.keys(COLORS).map((color) => (
@@ -177,6 +231,44 @@ function EditProductModal({ setOpen, onClick, open = false }) {
                   </option>
                 ))}
               </select>
+            </div>
+          </div>
+
+          <div className='sm:col-span-3'>
+            <label
+              htmlFor='image-url'
+              className='block text-sm font-medium leading-6 text-gray-900'
+            >
+              Image Url
+            </label>
+            <div className='mt-2'>
+              <input
+                type='text'
+                name='imgUrl'
+                id='image-url'
+                value={product.imgUrl}
+                onChange={(e) => handleUpdateValues(e)}
+                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+              />
+            </div>
+          </div>
+
+          <div className='sm:col-span-3'>
+            <label
+              htmlFor='image-alt'
+              className='block text-sm font-medium leading-6 text-gray-900'
+            >
+              Image Alt
+            </label>
+            <div className='mt-2'>
+              <input
+                type='text'
+                name='imgAlt'
+                id='image-alt'
+                value={product.imgAlt}
+                onChange={(e) => handleUpdateValues(e)}
+                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+              />
             </div>
           </div>
 
@@ -193,43 +285,9 @@ function EditProductModal({ setOpen, onClick, open = false }) {
                 name='description'
                 rows={3}
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                defaultValue={""}
+                value={product.description}
+                onChange={(e) => handleUpdateValues(e)}
               />
-            </div>
-          </div>
-
-          <div className='col-span-full'>
-            <label
-              htmlFor='cover-photo'
-              className='block text-sm font-medium leading-6 text-gray-900'
-            >
-              Image
-            </label>
-            <div className='mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-8'>
-              <div className='text-center'>
-                <PhotoIcon
-                  className='mx-auto h-12 w-12 text-gray-300'
-                  aria-hidden='true'
-                />
-                <div className='mt-4 flex text-sm leading-6 text-gray-600'>
-                  <label
-                    htmlFor='file-upload'
-                    className='relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500'
-                  >
-                    <span>Upload a file</span>
-                    <input
-                      id='file-upload'
-                      name='file-upload'
-                      type='file'
-                      className='sr-only'
-                    />
-                  </label>
-                  <p className='pl-1'>or drag and drop</p>
-                </div>
-                <p className='text-xs leading-5 text-gray-600'>
-                  PNG, JPG, GIF up to 10MB
-                </p>
-              </div>
             </div>
           </div>
         </div>

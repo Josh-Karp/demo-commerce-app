@@ -62,7 +62,7 @@ function ProductPage() {
               <ProductCard
                 key={product.id}
                 orientation={orientation}
-                {...product}
+                product={product}
               />
             ))}
             <AddProductCard />
