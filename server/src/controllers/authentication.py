@@ -25,10 +25,11 @@ def login():
         return make_response(jsonify({"message": f"Invalid request body"}), 400)
 
     user = User.query.filter(User.email == email).one_or_none()
-    role = Role.query.filter(Role.id == user.role_id).one_or_none()
 
     if user is None:
         return make_response(jsonify({"message": f"User with email {email} not found"}), 404)
+    
+    role = Role.query.filter(Role.id == user.role_id).one_or_none()
 
     verify_password = user.is_password_correct(password)
 
