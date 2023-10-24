@@ -47,7 +47,7 @@ def login():
 
         return make_response(jsonify({"token": token.decode("UTF-8")}), 201)
     else:
-        return make_response(jsonify({"Password is incorrect"}), 401)
+        return make_response(jsonify({"message": "Password is incorrect"}), 401)
 
 
 @auth_bp.route("/register", methods=["POST"])
