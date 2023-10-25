@@ -2,8 +2,17 @@
 
 ## Live Demo
 
-1. Web - `https://vercel.com/josh-karp/demo-commerce-app` *(Vercel)*
+1. Web - `[https://vercel.com/josh-karp/demo-commerce-app](https://demo-commerce-app.vercel.app/)` *(Vercel)*
 2. Server - `http://167.172.150.140:5000` *(DigitalOcean Droplet)*
+
+Credentials: 
+Demo user:
+- Email: demo@demo.com
+- Password: demo1234
+
+Admin user:
+- Email: admin@admin.com
+- Password: admin1234
 
 > Note: The server does not have an SSL certificate, **Insecure content** must be set to allowed on the browser under site settings.
 
@@ -13,7 +22,7 @@
 
 - **Flask** - a lightweight web framework for Python, used for building the backend of the application.
 - **Flask**-SQLAlchemy - an extension for Flask that adds support for SQLAlchemy, a popular SQL toolkit and ORM.
-- **Flask**-CORS - an extension for Flask that adds support for Cross-Origin Resource Sharing (CORS), which allows for secure cross-domain data transfers.
+- **Flask**-CORS - an extension for Flask that supports Cross-Origin Resource Sharing (CORS), allowing for secure cross-domain data transfers.
 - **PyMySQL** - a pure-Python MySQL client library, used for connecting to and interacting with a MySQL database.
 - **cryptography** - a library for secure communication and cryptography, used for encrypting and decrypting sensitive data.
 - **python**-dotenv - a library for managing environment variables, used for storing sensitive configuration information.
