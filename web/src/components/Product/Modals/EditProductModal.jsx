@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 import { useProductsContext } from "../../../context/ProductContext";
 import { useProduct } from "../../../hooks/useProducts";
 import useUpdateProduct from "../../../hooks/useUpdateProduct";
-import toBase64 from "../../../utils/toBase64";
 import Modal from "../../Layout/Modal";
 import FileUpload from "../../Shared/FileUpload";
 
@@ -30,7 +29,7 @@ const CATEGORIES = Object.freeze({
 
 function EditProductModal({ setOpen, onClick, open = false }) {
   const { updateProduct } = useUpdateProduct();
-  const [proudctImage, setProductImage] = useState(null);
+  const [productImage, setProductImage] = useState(null);
   const { activeProduct } = useProductsContext();
   const { data, isLoading, isError } = useProduct(activeProduct);
   const [product, setProduct] = useState({});
@@ -46,14 +45,9 @@ function EditProductModal({ setOpen, onClick, open = false }) {
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
 
-    let base64Image = null;
-    if (typeof productImage === "object") {
-      base64Image = await toBase64(productImage);
-    }
-
     const product_data = {
       id: data.id,
-      image: base64Image || data.image,
+      image: productImage,
       ...product,
     };
 
@@ -134,6 +128,7 @@ function EditProductModal({ setOpen, onClick, open = false }) {
                 id='name'
                 value={product.name}
                 onChange={(e) => handleUpdateValues(e)}
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
@@ -153,7 +148,7 @@ function EditProductModal({ setOpen, onClick, open = false }) {
                 id='sku'
                 value={product.sku}
                 onChange={(e) => handleUpdateValues(e)}
-                autoComplete='given-name'
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
@@ -168,11 +163,12 @@ function EditProductModal({ setOpen, onClick, open = false }) {
             </label>
             <div className='mt-2'>
               <input
-                type='text'
+                type='number'
                 name='price'
                 id='price'
                 value={product.price}
                 onChange={(e) => handleUpdateValues(e)}
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
@@ -192,6 +188,7 @@ function EditProductModal({ setOpen, onClick, open = false }) {
                 id='brand'
                 value={product.brand}
                 onChange={(e) => handleUpdateValues(e)}
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
@@ -210,6 +207,7 @@ function EditProductModal({ setOpen, onClick, open = false }) {
                 name='category'
                 value={product.category}
                 onChange={(e) => handleUpdateValues(e)}
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
               >
                 {Object.keys(CATEGORIES).map((color) => (
@@ -234,6 +232,7 @@ function EditProductModal({ setOpen, onClick, open = false }) {
                 name='color'
                 value={product.color}
                 onChange={(e) => handleUpdateValues(e)}
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
               >
                 {Object.keys(COLORS).map((color) => (
@@ -259,6 +258,7 @@ function EditProductModal({ setOpen, onClick, open = false }) {
                 rows={3}
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 value={product.description}
+                required
                 onChange={(e) => handleUpdateValues(e)}
               />
             </div>
@@ -266,7 +266,7 @@ function EditProductModal({ setOpen, onClick, open = false }) {
 
           <FileUpload
             label='Product Image'
-            file={proudctImage}
+            file={productImage}
             setFile={setProductImage}
           />
         </div>
