@@ -60,30 +60,3 @@ class Product(db.Model):
 
     def __str__(self):
         return f"<Product: {self.name}>"
-
-    def __init__(
-        self,
-        name: str,
-        category: str,
-        description: str,
-        brand: str,
-        sku: str,
-        price: float,
-        color: str,
-        img_url: str,
-        img_alt: str,
-        popularity_score: int,
-    ):
-        """
-        Create a new product object.
-        """
-        self.name = name
-        self.category = category
-        self.description = description
-        self.brand = brand
-        self.sku = sku
-        self.price = price
-        self.color = color
-        self.img_url = img_url
-        self.img_alt = img_alt
-        self.popularity_score = popularity_score
