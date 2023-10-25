@@ -2,19 +2,21 @@
 
 ## Live Demo
 
-1. Web - `[https://vercel.com/josh-karp/demo-commerce-app](https://demo-commerce-app.vercel.app/)` *(Vercel)*
+1. Web - `https://demo-commerce-app.vercel.app/` *(Vercel)*
 2. Server - `http://167.172.150.140:5000` *(DigitalOcean Droplet)*
 
-Credentials: 
-Demo user:
+> Note: The server does not have an SSL certificate, **Insecure content** must be set to allowed on the browser under site settings.
+
+### Credentials: 
+#### Demo user:
 - Email: demo@demo.com
 - Password: demo1234
 
-Admin user:
+#### Admin user:
 - Email: admin@admin.com
-- Password: admin1234
+- Password: admin
 
-> Note: The server does not have an SSL certificate, **Insecure content** must be set to allowed on the browser under site settings.
+> Note: Only the Admin user can create, delete & update products
 
 ## Server
 

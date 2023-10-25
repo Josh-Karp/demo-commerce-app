@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import AdminGuard from "../components/AdminGuard";
 import LoadingSpinner from "../components/LoadingSpinner";
 import AddProductCard from "../components/Product/AddProductCard";
 import AddProductModal from "../components/Product/Modals/AddProductModal";
@@ -66,7 +67,9 @@ function ProductPage() {
             product={product}
           />
         ))}
-        <AddProductCard />
+        <AdminGuard>
+          <AddProductCard />
+        </AdminGuard>
       </div>
       {MODALS.map(({ id, Component }) => (
         <Component
