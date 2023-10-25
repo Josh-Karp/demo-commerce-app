@@ -37,8 +37,9 @@ function EditProductModal({ setOpen, onClick, open = false }) {
 
   useEffect(() => {
     if (data) {
-      setProductImage(data.image);
-      setProduct(data);
+      const { id, updated_at, created_at, image, ...rest } = data;
+      setProductImage(image);
+      setProduct(rest);
     }
   }, [data]);
 
