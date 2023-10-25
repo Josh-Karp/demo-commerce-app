@@ -7,21 +7,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 @dataclass
 class User(db.Model):
-    """
-    A class representing a user in the system.
-
-    Attributes:
-        id (int): The unique identifier of the user.
-        username (str): The username of the user.
-        email (str): The email address of the user.
-        password (str): The password of the user.
-        first_name (str): The first name of the user.
-        last_name (str): The last name of the user.
-        created_at (datetime): The date and time when the user was created.
-        updated_at (datetime): The date and time when the user was last updated.
-        roles (list): The list of roles assigned to the user.
-    """
-
     id: int
     username: str
     email: str

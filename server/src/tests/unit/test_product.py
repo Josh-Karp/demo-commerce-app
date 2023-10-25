@@ -14,8 +14,6 @@ def test_product_creation():
         sku="TEST123",
         price=9.99,
         color="Test Color",
-        img_url="https://example.com/test.jpg",
-        img_alt="Test Image",
         popularity_score=0,
     )
     assert product.name == "Test Product"
@@ -25,6 +23,4 @@ def test_product_creation():
     assert product.sku == "TEST123"
     assert product.price == 9.99
     assert product.color == "Test Color"
-    assert product.img_url == "https://example.com/test.jpg"
-    assert product.img_alt == "Test Image"
     assert product.popularity_score == 0

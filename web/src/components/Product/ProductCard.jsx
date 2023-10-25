@@ -11,18 +11,8 @@ export const ORIENTATIONS = Object.freeze({
 });
 
 function ProductCard({ product, orientation = ORIENTATIONS.vertical }) {
-  const {
-    id,
-    name,
-    sku,
-    price,
-    brand,
-    category,
-    color,
-    description,
-    "img_url": imageSrc,
-    "img-alt": imageAlt,
-  } = product;
+  const { id, name, sku, price, brand, category, color, description, image } =
+    product;
 
   const { handleToggleModal, setActiveProduct } = useProductsDispatch();
 
@@ -54,8 +44,8 @@ function ProductCard({ product, orientation = ORIENTATIONS.vertical }) {
         )}
       >
         <img
-          src={imageSrc}
-          alt={imageAlt}
+          src={image}
+          alt='product image'
           className='h-full w-full object-cover object-center lg:h-full lg:w-full'
         />
       </div>
@@ -96,7 +86,7 @@ function ProductCard({ product, orientation = ORIENTATIONS.vertical }) {
         <div
           className={clsx(
             [orientation === ORIENTATIONS.hoizontal && "mt-auto"],
-            "p-4 flex"
+            "mt-auto p-4 flex"
           )}
         >
           <button

@@ -1,7 +1,9 @@
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import useCreateProduct from "../../../hooks/useCreateProduct";
 import Modal from "../../Layout/Modal";
+import FileUpload from "../../Shared/FileUpload";
 
 const COLORS = Object.freeze({
   red: "Red",
@@ -24,22 +26,14 @@ const CATEGORIES = Object.freeze({
 });
 
 function AddProductModal({ setOpen, onClick, open = false }) {
+  const [proudctImage, setProductImage] = useState(null);
   const { createProduct } = useCreateProduct();
 
   const handleCreateProduct = async (e) => {
     e.preventDefault();
 
-    const {
-      name,
-      sku,
-      price,
-      brand,
-      category,
-      color,
-      description,
-      imgUrl,
-      imgAlt,
-    } = e.target.elements;
+    const { name, sku, price, brand, category, color, description } =
+      e.target.elements;
 
     const product = {
       name: name.value,
@@ -48,8 +42,7 @@ function AddProductModal({ setOpen, onClick, open = false }) {
       brand: brand.value,
       category: category.value,
       color: color.value,
-      "img_url": imgUrl.value,
-      "img_alt": imgAlt.value,
+      image: proudctImage,
       description: description.value,
     };
 
@@ -57,11 +50,12 @@ function AddProductModal({ setOpen, onClick, open = false }) {
       await createProduct(product);
 
       toast.success("Product created successfully");
+
+      setProductImage(null);
+      setOpen("add-product");
     } catch (error) {
       console.log(error);
       toast.error(error.message);
-    } finally {
-      setOpen("add-product");
     }
   };
 
@@ -112,6 +106,7 @@ function AddProductModal({ setOpen, onClick, open = false }) {
                 type='text'
                 name='name'
                 id='name'
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
@@ -129,6 +124,7 @@ function AddProductModal({ setOpen, onClick, open = false }) {
                 type='text'
                 name='sku'
                 id='sku'
+                required
                 autoComplete='given-name'
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
@@ -144,9 +140,10 @@ function AddProductModal({ setOpen, onClick, open = false }) {
             </label>
             <div className='mt-2'>
               <input
-                type='text'
+                type='number'
                 name='price'
                 id='price'
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
@@ -164,6 +161,7 @@ function AddProductModal({ setOpen, onClick, open = false }) {
                 type='text'
                 name='brand'
                 id='brand'
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
@@ -180,6 +178,7 @@ function AddProductModal({ setOpen, onClick, open = false }) {
               <select
                 id='category'
                 name='category'
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
               >
                 {Object.keys(CATEGORIES).map((color) => (
@@ -202,6 +201,7 @@ function AddProductModal({ setOpen, onClick, open = false }) {
               <select
                 id='color'
                 name='color'
+                required
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
               >
                 {Object.keys(COLORS).map((color) => (
@@ -210,40 +210,6 @@ function AddProductModal({ setOpen, onClick, open = false }) {
                   </option>
                 ))}
               </select>
-            </div>
-          </div>
-
-          <div className='sm:col-span-3'>
-            <label
-              htmlFor='image-url'
-              className='block text-sm font-medium leading-6 text-gray-900'
-            >
-              Image Url
-            </label>
-            <div className='mt-2'>
-              <input
-                type='text'
-                name='imgUrl'
-                id='image-url'
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-              />
-            </div>
-          </div>
-
-          <div className='sm:col-span-3'>
-            <label
-              htmlFor='image-alt'
-              className='block text-sm font-medium leading-6 text-gray-900'
-            >
-              Image Alt
-            </label>
-            <div className='mt-2'>
-              <input
-                type='text'
-                name='imgAlt'
-                id='image-alt'
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-              />
             </div>
           </div>
 
@@ -261,9 +227,16 @@ function AddProductModal({ setOpen, onClick, open = false }) {
                 rows={3}
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 defaultValue={""}
+                required
               />
             </div>
           </div>
+
+          <FileUpload
+            label='Product Image'
+            file={proudctImage}
+            setFile={setProductImage}
+          />
         </div>
       </form>
     </Modal>

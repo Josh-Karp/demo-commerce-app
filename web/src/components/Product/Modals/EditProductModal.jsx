@@ -4,7 +4,9 @@ import toast from "react-hot-toast";
 import { useProductsContext } from "../../../context/ProductContext";
 import { useProduct } from "../../../hooks/useProducts";
 import useUpdateProduct from "../../../hooks/useUpdateProduct";
+import toBase64 from "../../../utils/toBase64";
 import Modal from "../../Layout/Modal";
+import FileUpload from "../../Shared/FileUpload";
 
 const COLORS = Object.freeze({
   red: "Red",
@@ -28,12 +30,14 @@ const CATEGORIES = Object.freeze({
 
 function EditProductModal({ setOpen, onClick, open = false }) {
   const { updateProduct } = useUpdateProduct();
+  const [proudctImage, setProductImage] = useState(null);
   const { activeProduct } = useProductsContext();
   const { data, isLoading, isError } = useProduct(activeProduct);
   const [product, setProduct] = useState({});
 
   useEffect(() => {
     if (data) {
+      setProductImage(data.image);
       setProduct(data);
     }
   }, [data]);
@@ -41,8 +45,14 @@ function EditProductModal({ setOpen, onClick, open = false }) {
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
 
+    let base64Image = null;
+    if (typeof productImage === "object") {
+      base64Image = await toBase64(productImage);
+    }
+
     const product_data = {
       id: data.id,
+      image: base64Image || data.image,
       ...product,
     };
 
@@ -50,11 +60,10 @@ function EditProductModal({ setOpen, onClick, open = false }) {
       await updateProduct(product_data);
 
       toast.success("Product updated successfully");
+      setOpen("edit-product");
     } catch (error) {
       console.log(error);
       toast.error(error.message);
-    } finally {
-      setOpen("edit-product");
     }
   };
 
@@ -235,44 +244,6 @@ function EditProductModal({ setOpen, onClick, open = false }) {
             </div>
           </div>
 
-          <div className='sm:col-span-3'>
-            <label
-              htmlFor='image-url'
-              className='block text-sm font-medium leading-6 text-gray-900'
-            >
-              Image Url
-            </label>
-            <div className='mt-2'>
-              <input
-                type='text'
-                name='imgUrl'
-                id='image-url'
-                value={product.imgUrl}
-                onChange={(e) => handleUpdateValues(e)}
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-              />
-            </div>
-          </div>
-
-          <div className='sm:col-span-3'>
-            <label
-              htmlFor='image-alt'
-              className='block text-sm font-medium leading-6 text-gray-900'
-            >
-              Image Alt
-            </label>
-            <div className='mt-2'>
-              <input
-                type='text'
-                name='imgAlt'
-                id='image-alt'
-                value={product.imgAlt}
-                onChange={(e) => handleUpdateValues(e)}
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-              />
-            </div>
-          </div>
-
           <div className='col-span-full'>
             <label
               htmlFor='description'
@@ -291,6 +262,12 @@ function EditProductModal({ setOpen, onClick, open = false }) {
               />
             </div>
           </div>
+
+          <FileUpload
+            label='Product Image'
+            file={proudctImage}
+            setFile={setProductImage}
+          />
         </div>
       </form>
     </Modal>

@@ -15,8 +15,6 @@ def test_read_all_products(test_client, init_database):
             sku="TEST123",
             price=9.99,
             color="Test Color 1",
-            img_url="https://example.com/test1.jpg",
-            img_alt="Test Image 1",
             popularity_score=0,
         ),
         Product(
@@ -27,8 +25,6 @@ def test_read_all_products(test_client, init_database):
             sku="TEST456",
             price=19.99,
             color="Test Color 2",
-            img_url="https://example.com/test2.jpg",
-            img_alt="Test Image 2",
             popularity_score=0,
         ),
     ]
@@ -60,8 +56,6 @@ def test_read_product_by_id(test_client, init_database):
         sku="TEST1234",
         price=9.99,
         color="Test Color",
-        img_url="https://example.com/test.jpg",
-        img_alt="Test Image",
         popularity_score=0,
     )
     db.session.add(product)
@@ -80,8 +74,6 @@ def test_read_product_by_id(test_client, init_database):
     assert response_data["sku"] == "TEST1234"
     assert response_data["price"] == 9.99
     assert response_data["color"] == "Test Color"
-    assert response_data["img_url"] == "https://example.com/test.jpg"
-    assert response_data["img_alt"] == "Test Image"
     assert response_data["popularity_score"] == 0
 
     db.session.delete(product)
@@ -99,8 +91,6 @@ def test_create_product(test_client, init_database):
         "sku": "TEST123",
         "price": 9.99,
         "color": "Test Color",
-        "img_url": "https://example.com/test.jpg",
-        "img_alt": "Test Image",
         "popularity_score": 0,
     }
 
@@ -118,8 +108,6 @@ def test_create_product(test_client, init_database):
     assert product.brand == "Test Brand"
     assert product.price == 9.99
     assert product.color == "Test Color"
-    assert product.img_url == "https://example.com/test.jpg"
-    assert product.img_alt == "Test Image"
     assert product.popularity_score == 0
 
     db.session.delete(product)
@@ -159,8 +147,6 @@ def test_create_product_duplicate_sku(test_client, init_database):
         "sku": "TEST123",
         "price": 9.99,
         "color": "Test Color",
-        "img_url": "https://example.com/test.jpg",
-        "img_alt": "Test Image",
         "popularity_score": 0,
     }
 

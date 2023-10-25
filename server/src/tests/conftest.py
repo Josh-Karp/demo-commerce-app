@@ -63,8 +63,6 @@ def init_database():
         sku="test_sku",
         price=0.00,
         color="test_color",
-        img_url="test_img_url",
-        img_alt="test_img_alt",
         popularity_score=0,
     )
 
